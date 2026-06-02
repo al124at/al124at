@@ -1,95 +1,95 @@
 # Segmentácia koronálnych štruktúr v sekvencii obrazov slnečnej koróny
 
-This repository contains the practical part of the bachelor thesis **“Segmentácia koronálnych štruktúr v sekvencii obrazov slnečnej koróny”**.
+Tento repozitár obsahuje praktickú časť bakalárskej práce **„Segmentácia koronálnych štruktúr v sekvencii obrazov slnečnej koróny“**.
 
-The work compares the reference **SCSS-Net** model with the proposed **ConvLSTM-SCSS-Net** architecture. SCSS-Net is used as a baseline model that processes one image, while ConvLSTM-SCSS-Net processes a short sequence of temporally close solar corona images.
+Práca porovnáva referenčný model **SCSS-Net** s navrhnutou architektúrou **ConvLSTM-SCSS-Net**. SCSS-Net slúži ako základný porovnávací model, ktorý spracúva jeden obraz, zatiaľ čo ConvLSTM-SCSS-Net spracúva krátku sekvenciu časovo blízkych obrazov slnečnej koróny.
 
-The goal is to evaluate whether temporal context from sequnces of images can improve the segmentation of coronal structures.
+Cieľom je overiť, či časový kontext získaný zo sekvencie obrazov môže zlepšiť segmentáciu koronálnych štruktúr.
 
-## Repository structure
+## Štruktúra repozitára
 
 ```text
-src/                 model definitions and metrics
-notebooks/           standard pipeline notebooks
-trained_models/      trained SCSS-Net and ConvLSTM-SCSS-Net models
-data/                compact prediction datasets
-outputs/             generated outputs after running notebooks
-requirements.txt     Python dependencies
+src/                 definície modelov a metrík
+notebooks/           notebooky so štandardným pipeline
+trained_models/      natrénované modely SCSS-Net a ConvLSTM-SCSS-Net
+data/                kompaktné dátové sady na predikciu
+outputs/             výstupy vytvorené po spustení notebookov
+requirements.txt     Python závislosti
 ```
 
-## Models
+## Modely
 
-Two models are included:
+Repozitár obsahuje dva modely:
 
-* **SCSS-Net** — baseline model working with a single image;
-* **ConvLSTM-SCSS-Net** — proposed model working with a sequence of images.
+* **SCSS-Net** — základný model pracujúci s jedným obrazom;
+* **ConvLSTM-SCSS-Net** — navrhnutý model pracujúci so sekvenciou obrazov.
 
-The standard sequence contains three previous frames and the current target frame:
+Štandardná sekvencia obsahuje tri predchádzajúce snímky a aktuálny cieľový obraz:
 
 ```text
 input_1, input_2, input_3, target image
 ```
 
-The model then predicts the segmentation mask for the target image.
+Model následne predikuje segmentačnú masku pre cieľový obraz.
 
-## Data
+## Dáta
 
-The full training datasets are not included because of their size.
+Kompletné tréningové dátové sady nie sú súčasťou repozitára z dôvodu ich veľkosti.
 
-Instead, the repository contains compact final prediction datasets:
+Namiesto toho repozitár obsahuje kompaktné finálne dátové sady na predikciu:
 
 ```text
 data/CH_predict_2021/
 data/AR_predict_2021/
 ```
 
-These datasets are used to demonstrate the final prediction and post-processing pipeline with already trained models.
+Tieto dátové sady slúžia na demonštráciu finálnej predikcie a post-processing pipeline s už natrénovanými modelmi.
 
-## Notebooks
+## Notebooky
 
-The repository contains two main notebooks:
+Repozitár obsahuje dva hlavné notebooky:
 
 ```text
 notebooks/CH_demo.ipynb
-notebooks/AR_demo_final.ipynb
+notebooks/AR_demo.ipynb
 ```
 
-Both notebooks keep the structure of the full standard pipeline:
+Oba notebooky zachovávajú štruktúru kompletného štandardného pipeline:
 
-1. setup and configuration;
-2. data discovery;
-3. temporal sequence preparation;
-4. preprocessing and generators;
-5. model construction;
-6. training stage placeholder;
-7. loading of trained models;
-8. final prediction;
+1. nastavenie a konfigurácia;
+2. vyhľadanie dát;
+3. príprava časovej sekvencie;
+4. predspracovanie a generátory;
+5. vytvorenie modelov;
+6. zástupná časť pre tréning;
+7. načítanie natrénovaných modelov;
+8. finálna predikcia;
 9. post-processing;
-10. visual and numerical comparison.
+10. vizuálne a numerické porovnanie.
 
-The full training stage is disabled by default because the full training dataset is not included. Instead, the notebooks load trained models from:
+Kompletný tréning je predvolene vypnutý, pretože úplná tréningová dátová sada nie je súčasťou repozitára. Namiesto toho notebooky načítavajú natrénované modely z priečinka:
 
 ```text
 trained_models/
 ```
 
-## How to run
+## Ako spustiť
 
-Install dependencies:
+Nainštalujte potrebné závislosti:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Open Jupyter Notebook:
+Spustite Jupyter Notebook:
 
 ```bash
 jupyter notebook
 ```
 
-Then run one of the notebooks from the `notebooks/` folder.
+Potom spustite jeden z notebookov v priečinku `notebooks/`.
 
-The notebooks use relative paths, so the repository should keep this structure:
+Notebooky používajú relatívne cesty, preto by mala zostať zachovaná táto štruktúra repozitára:
 
 ```text
 src/
@@ -98,30 +98,30 @@ trained_models/
 data/
 ```
 
-During execution, the ZIP files from `data/` are automatically unpacked, trained models are loaded, and predictions are saved to:
+Počas spustenia sa ZIP súbory z priečinka `data/` automaticky rozbalia, natrénované modely sa načítajú a predikcie sa uložia do priečinka:
 
 ```text
 outputs/
 ```
 
-## Output
+## Výstup
 
-The notebooks generate:
+Notebooky generujú:
 
-* predicted binary masks;
-* visual comparison images;
-* overlay comparison images;
-* CSV files with metrics;
-* run configuration files.
+* predikované binárne masky;
+* obrázky na vizuálne porovnanie;
+* overlay porovnania;
+* CSV súbory s metrikami;
+* konfiguračné súbory spustenia.
 
-Overlay colors:
+Farby v overlay porovnaní:
 
 ```text
-red    = baseline only
-cyan   = ConvLSTM only
-yellow = both models
+red    = iba baseline model
+cyan   = iba ConvLSTM model
+yellow = oba modely
 ```
 
-## Notes
+## Poznámky
 
-The repository is intended to demonstrate the practical pipeline and final prediction process. Full training from scratch requires the original full datasets, which are not included in this repository.
+Repozitár slúži na demonštráciu praktického pipeline a procesu finálnej predikcie. Kompletný tréning od začiatku vyžaduje pôvodné úplné dátové sady, ktoré nie sú súčasťou tohto repozitára.
