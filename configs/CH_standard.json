@@ -35,7 +35,7 @@
       "dropout": 0.3,
       "convlstm_filters": 32,
       "batch_size_baseline": 8,
-      "batch_size_convlstm": 4
+      "batch_size_convlstm": 8
     },
 
     "training_parameters": {
