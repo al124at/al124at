@@ -1,0 +1,82 @@
+{
+  "experiment_id": "CH_low",
+  "display_name": "CH / low parameters / final 2021",
+  "structure": "CH",
+  "channel": "193",
+  "description": "Low-parameter experiment for coronal hole segmentation. The models were trained on the full available CH training dataset with reduced model capacity.",
+
+  "training_config": {
+    "training_enabled_in_repository": false,
+    "training_data_in_repository": false,
+    "train_dataset": "full CH training dataset",
+    "annotation_sources": ["Region Growth", "Zooniverse"],
+    "image_channel": "193 Å",
+    "image_size": [256, 256],
+    "sequence_length": 4,
+    "previous_frames": 3,
+    "time_offsets_minutes": [30, 20, 10],
+    "target_frame_included": true,
+
+    "baseline_model": {
+      "name": "SCSS-Net",
+      "input_type": "single target image",
+      "input_shape": [256, 256, 1]
+    },
+
+    "convlstm_model": {
+      "name": "ConvLSTM-SCSS-Net",
+      "input_type": "temporal sequence",
+      "input_shape": [4, 256, 256, 1]
+    },
+
+    "model_parameters": {
+      "filters": 16,
+      "encoder_decoder_levels": 3,
+      "dropout": 0.3,
+      "convlstm_filters": 16,
+      "batch_size_baseline": 8,
+      "batch_size_convlstm": 8
+    },
+
+    "training_parameters": {
+      "loss": "BCE + Dice loss",
+      "optimizer": "Adam",
+      "metrics": ["Dice", "IoU"]
+    },
+
+    "preprocessing": {
+      "remove_black_background": true,
+      "grayscale": true,
+      "resize": [256, 256],
+      "normalize_0_1": true
+    },
+
+    "note": "This experiment used the same CH training dataset as the standard configuration, but the number of filters, encoder-decoder levels and ConvLSTM filters was reduced."
+  },
+
+  "prediction_config": {
+    "prediction_dataset": "CH final 2021",
+    "threshold": 0.5,
+
+    "models": {
+      "baseline": "trained_models/CH_low_models/CH_low_baseline_model.keras",
+      "convlstm": "trained_models/CH_low_models/CH_low_convlstm_model.keras"
+    },
+
+    "archives": [
+      "data/CH_predict_2021/images_CH.zip",
+      "data/CH_predict_2021/masks_CH.zip",
+      "data/CH_predict_2021/sequences_CH.zip"
+    ],
+
+    "output_dir": "outputs/CH_low",
+
+    "postprocessing": {
+      "probability_map": true,
+      "binary_threshold": 0.5,
+      "save_binary_masks": true,
+      "create_overlay": true,
+      "create_model_comparison": true
+    }
+  }
+}
