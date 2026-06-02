@@ -1,0 +1,82 @@
+{
+  "experiment_id": "CH_region_growth",
+  "display_name": "CH / Region Growth / final 2021",
+  "structure": "CH",
+  "channel": "193",
+  "description": "Region Growth experiment for coronal hole segmentation. The models were trained only on the Region Growth part of the CH training dataset.",
+
+  "training_config": {
+    "training_enabled_in_repository": false,
+    "training_data_in_repository": false,
+    "train_dataset": "Region Growth only",
+    "annotation_sources": ["Region Growth"],
+    "image_channel": "193 Å",
+    "image_size": [256, 256],
+    "sequence_length": 4,
+    "previous_frames": 3,
+    "time_offsets_minutes": [30, 20, 10],
+    "target_frame_included": true,
+
+    "baseline_model": {
+      "name": "SCSS-Net",
+      "input_type": "single target image",
+      "input_shape": [256, 256, 1]
+    },
+
+    "convlstm_model": {
+      "name": "ConvLSTM-SCSS-Net",
+      "input_type": "temporal sequence",
+      "input_shape": [4, 256, 256, 1]
+    },
+
+    "model_parameters": {
+      "filters": 32,
+      "encoder_decoder_levels": 4,
+      "dropout": 0.3,
+      "convlstm_filters": 32,
+      "batch_size_baseline": 8,
+      "batch_size_convlstm": 8
+    },
+
+    "training_parameters": {
+      "loss": "BCE + Dice loss",
+      "optimizer": "Adam",
+      "metrics": ["Dice", "IoU"]
+    },
+
+    "preprocessing": {
+      "remove_black_background": true,
+      "grayscale": true,
+      "resize": [256, 256],
+      "normalize_0_1": true
+    },
+
+    "note": "This experiment differs from the standard CH configuration by using only the Region Growth annotations for training."
+  },
+
+  "prediction_config": {
+    "prediction_dataset": "CH final 2021",
+    "threshold": 0.5,
+
+    "models": {
+      "baseline": "trained_models/CH_Region_growth_models/CH_RG_baseline_model.keras",
+      "convlstm": "trained_models/CH_Region_growth_models/CH_RG_convlstm_model.keras"
+    },
+
+    "archives": [
+      "data/CH_predict_2021/images_CH.zip",
+      "data/CH_predict_2021/masks_CH.zip",
+      "data/CH_predict_2021/sequences_CH.zip"
+    ],
+
+    "output_dir": "outputs/CH_region_growth",
+
+    "postprocessing": {
+      "probability_map": true,
+      "binary_threshold": 0.5,
+      "save_binary_masks": true,
+      "create_overlay": true,
+      "create_model_comparison": true
+    }
+  }
+}
