@@ -1,0 +1,87 @@
+{
+  "experiment_id": "CH_2025_processed",
+  "display_name": "CH / standard models / processed final 2025",
+  "structure": "CH",
+  "channel": "193",
+  "description": "Prediction experiment on the processed CH 2025 dataset. The models were trained in the standard CH configuration, but the final prediction dataset was replaced by the processed 2025 data.",
+
+  "training_config": {
+    "training_enabled_in_repository": false,
+    "training_data_in_repository": false,
+    "train_dataset": "full CH training dataset",
+    "annotation_sources": ["Region Growth", "Zooniverse"],
+    "image_channel": "193 Å",
+    "image_size": [256, 256],
+    "sequence_length": 4,
+    "previous_frames": 3,
+    "time_offsets_minutes": [30, 20, 10],
+    "target_frame_included": true,
+
+    "baseline_model": {
+      "name": "SCSS-Net",
+      "input_type": "single target image",
+      "input_shape": [256, 256, 1]
+    },
+
+    "convlstm_model": {
+      "name": "ConvLSTM-SCSS-Net",
+      "input_type": "temporal sequence",
+      "input_shape": [4, 256, 256, 1]
+    },
+
+    "model_parameters": {
+      "filters": 32,
+      "encoder_decoder_levels": 4,
+      "dropout": 0.3,
+      "convlstm_filters": 32,
+      "batch_size_baseline": 8,
+      "batch_size_convlstm": 8
+    },
+
+    "training_parameters": {
+      "loss": "BCE + Dice loss",
+      "optimizer": "Adam",
+      "metrics": ["Dice", "IoU"]
+    },
+
+    "preprocessing": {
+      "remove_black_background": true,
+      "grayscale": true,
+      "resize": [256, 256],
+      "normalize_0_1": true
+    },
+
+    "note": "The training setup is the same as CH_standard. The difference is in the final prediction dataset."
+  },
+
+  "prediction_config": {
+    "prediction_dataset": "CH processed final 2025",
+    "threshold": 0.5,
+
+    "models": {
+      "baseline": "trained_models/CH_standart_models/CH_base_model.keras",
+      "convlstm": "trained_models/CH_standart_models/CH_ConvLstm_model.keras"
+    },
+
+    "archives": [
+      "data/CH_predict_2025_processed/CH_processed_2025.zip"
+    ],
+
+    "preprocessing": {
+      "remove_black_background": true,
+      "grayscale": true,
+      "resize": [256, 256],
+      "normalize_0_1": true
+    },
+
+    "output_dir": "outputs/CH_2025_processed",
+
+    "postprocessing": {
+      "probability_map": true,
+      "binary_threshold": 0.5,
+      "save_binary_masks": true,
+      "create_overlay": true,
+      "create_model_comparison": true
+    }
+  }
+}
