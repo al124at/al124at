@@ -6,3 +6,5 @@ Pillow
 tqdm
 opencv-python-headless
 scikit-image
+jupyter
+ipykernel
