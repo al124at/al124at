@@ -20,7 +20,6 @@ data/             dodatočné vyhodnocovacie výberky pre predikciu
 src/              definície modelov a metrík
 trained_models/   uložené natrénované modely
 figures/          obrázky použité v notebookoch a dokumentácii
-outputs/          výstupy vytvorené po spustení notebookov
 AR_demo.ipynb     demonštračný pipeline pre aktívne oblasti
 CH_demo.ipynb     demonštračný pipeline pre koronálne diery
 requirements.txt  zoznam Python knižníc
