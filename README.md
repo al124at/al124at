@@ -157,7 +157,7 @@ AR_spoca
 
 Konfigurácia, v ktorej boli modely trénované iba na časti výberky s anotáciami SPoCA.
 
-Pri AR experimentoch sa používa threshold `0.25`. Tento prah bol použitý preto, že pri dodatočnej vyhodnocovacej výberke modely pri vyššom prahu častejšie označovali aj nežiadúce pixely, najmä v oblasti okrajového svitu slnečného disku.
+Pri AR experimentoch sa používa threshold `0.25`. V časti analýzy výsledkov boli použité aj vizualizácie s threshold `0.5`. V tomto prípade však modely častejšie zaznamenávali nadbytočné oblasti. Preto v demonštračných notebookoch v tomto repozitári je však v konfiguračných súboroch ponechaná hodnota threshold, ktorá sa ukázala ako stabilnejšia pre daný typ predikcie a vizuálne porovnanie
 
 ## Notebooky
 
@@ -183,6 +183,10 @@ Tréningová časť je v notebookoch opísaná slovne, pretože kompletné trén
 
 Projekt obsahuje uložené natrénované modely a dátové archívy, ktoré sú uložené pomocou Git LFS. Preto je po stiahnutí repozitára potrebné skontrolovať, či sa veľké súbory stiahli správne.
 
+---
+
+## Windows
+
 ### 1. Klonovanie repozitára
 
 ```bash
@@ -199,7 +203,7 @@ git lfs pull
 
 ### 2. Vytvorenie Python prostredia
 
-Projekt odporúčame spúšťať v samostatnom Python prostredí. Na Windows je možné vytvoriť lokálne prostredie `.venv` priamo v priečinku projektu:
+Projekt odporúčame spúšťať v samostatnom Python prostredí. Lokálne prostredie `.venv` je možné vytvoriť priamo v priečinku projektu:
 
 ```bash
 python -m venv .venv
@@ -214,16 +218,12 @@ Po aktivácii prostredia by sa mal v termináli zobraziť prefix:
 
 ### 3. Inštalácia závislostí
 
-Po aktivácii prostredia je potrebné nainštalovať knižnice zo súboru `requirements.txt`:
-
 ```bash
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
 ### 4. Otvorenie projektu vo VS Code
-
-Projekt je možné otvoriť vo VS Code priamo z aktívneho prostredia:
 
 ```bash
 code .
@@ -244,7 +244,96 @@ Vo VS Code je potrebné ako kernel zvoliť Python prostredie `.venv`, teda inter
 
 Notebook musí byť spustený v tom istom prostredí, v ktorom boli nainštalované závislosti z `requirements.txt`.
 
-### 5. Výber experimentu
+---
+
+## macOS / Linux
+
+### 1. Klonovanie repozitára
+
+```bash
+git clone https://github.com/al124at/al124at.git
+cd al124at
+```
+
+Ak sa veľké súbory nestiahnu automaticky, je potrebné spustiť:
+
+```bash
+git lfs install
+git lfs pull
+```
+
+Ak príkaz `git lfs` nie je dostupný, Git LFS je potrebné najskôr nainštalovať.
+
+macOS:
+
+```bash
+brew install git-lfs
+```
+
+Ubuntu / Debian:
+
+```bash
+sudo apt update
+sudo apt install git-lfs
+```
+
+Potom znova:
+
+```bash
+git lfs install
+git lfs pull
+```
+
+### 2. Vytvorenie Python prostredia
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Ak používateľ používa shell `fish`, aktivácia prostredia je:
+
+```bash
+source .venv/bin/activate.fish
+```
+
+Po aktivácii prostredia by sa mal v termináli zobraziť prefix:
+
+```text
+(.venv)
+```
+
+### 3. Inštalácia závislostí
+
+```bash
+python3 -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 4. Otvorenie projektu vo VS Code
+
+```bash
+code .
+```
+
+Následne je možné otvoriť jeden z notebookov:
+
+```text
+CH.ipynb
+AR.ipynb
+```
+
+Vo VS Code je potrebné ako kernel zvoliť Python prostredie `.venv`, teda interpreter:
+
+```text
+.venv/bin/python
+```
+
+Notebook musí byť spustený v tom istom prostredí, v ktorom boli nainštalované závislosti z `requirements.txt`.
+
+---
+
+## Výber experimentu
 
 Experiment sa volí v prvej spustiteľnej bunke notebooku pomocou premennej `CONFIG_PATH`.
 
@@ -262,7 +351,9 @@ CONFIG_PATH = "configs/AR_standard.json"
 
 Podľa zvoleného konfiguračného súboru sa automaticky načítajú príslušné modely, dátové archívy, threshold a výstupný priečinok.
 
-### 6. Spustenie notebooku
+---
+
+## Spustenie notebooku
 
 Notebook obsahuje dve hlavné spustiteľné časti:
 
@@ -271,7 +362,9 @@ Notebook obsahuje dve hlavné spustiteľné časti:
 
 Predikcia sa vykonáva postupne po jednotlivých obrázkoch, aby sa nezvyšovala pamäťová náročnosť. Výstupy sa ukladajú do priečinka definovaného v konfiguračnom súbore.
 
-### 7. Výstupy
+---
+
+## Výstupy
 
 Po spustení predikcie sa vytvorí priečinok:
 
@@ -289,7 +382,9 @@ metrics.csv           numerické metriky
 used_config.json      použitý konfiguračný súbor
 ```
 
-### 8. Poznámka ku Git LFS
+---
+
+## Poznámka ku Git LFS
 
 Súbor `.gitattributes` musí zostať v repozitári, pretože určuje, ktoré typy súborov sa majú ukladať pomocou Git LFS.
 
@@ -302,7 +397,6 @@ Používa sa najmä pre:
 
 Tieto súbory obsahujú natrénované modely a dátové archívy potrebné na spustenie predikčnej časti notebookov.
 
-
 ## Overlay vizualizácia
 
 V kolážach sa používa overlay porovnanie predikcií oboch modelov:
@@ -314,7 +408,3 @@ modrá   = pixely označené iba modelom ConvLSTM-SCSS-Net
 ```
 
 Táto vizualizácia slúži najmä na ručné porovnanie rozdielov medzi modelmi.
-
-## Poznámky
-
-Repozitár je určený na demonštráciu praktického pipeline a reprodukciu predikčnej časti experimentov pomocou uložených modelov. Plné trénovanie od začiatku vyžaduje kompletné tréningové dáta, ktoré nie sú súčasťou repozitára z dôvodu veľkosti.
