@@ -179,77 +179,129 @@ Notebooky majú rovnakú základnú štruktúru:
 
 Tréningová časť je v notebookoch opísaná slovne, pretože kompletné tréningové dáta nie sú v repozitári. Predikčná časť je spustiteľná.
 
-## Spustenie
+## Spustenie projektu
 
-Najprv je potrebné nainštalovať závislosti:
+Projekt obsahuje uložené natrénované modely a dátové archívy, ktoré sú uložené pomocou Git LFS. Preto je po stiahnutí repozitára potrebné skontrolovať, či sa veľké súbory stiahli správne.
+
+### 1. Klonovanie repozitára
 
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/al124at/al124at.git
+cd al124at
 ```
 
-Ak bol repozitár klonovaný cez Git, je potrebné mať aktivovaný Git LFS:
+Ak sa veľké súbory nestiahnu automaticky, je potrebné spustiť:
 
 ```bash
 git lfs install
 git lfs pull
 ```
 
-Potom je možné otvoriť Jupyter Notebook:
+### 2. Vytvorenie Python prostredia
+
+Projekt odporúčame spúšťať v samostatnom Python prostredí. Na Windows je možné vytvoriť lokálne prostredie `.venv` priamo v priečinku projektu:
 
 ```bash
-jupyter notebook
+python -m venv .venv
+.venv\Scripts\activate
 ```
 
-a spustiť jeden z notebookov:
+Po aktivácii prostredia by sa mal v termináli zobraziť prefix:
 
 ```text
-CH_demo.ipynb
-AR_demo.ipynb
+(.venv)
 ```
 
-## Výber experimentu v notebooku
+### 3. Inštalácia závislostí
 
-V notebooku sa experiment volí zmenou premennej `CONFIG_PATH`.
+Po aktivácii prostredia je potrebné nainštalovať knižnice zo súboru `requirements.txt`:
 
-Príklad pre štandardný CH experiment:
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 4. Otvorenie projektu vo VS Code
+
+Projekt je možné otvoriť vo VS Code priamo z aktívneho prostredia:
+
+```bash
+code .
+```
+
+Následne je možné otvoriť jeden z notebookov:
+
+```text
+CH.ipynb
+AR.ipynb
+```
+
+Vo VS Code je potrebné ako kernel zvoliť Python prostredie `.venv`, teda interpreter:
+
+```text
+.venv\Scripts\python.exe
+```
+
+Notebook musí byť spustený v tom istom prostredí, v ktorom boli nainštalované závislosti z `requirements.txt`.
+
+### 5. Výber experimentu
+
+Experiment sa volí v prvej spustiteľnej bunke notebooku pomocou premennej `CONFIG_PATH`.
+
+Príklad pre štandardný experiment koronálnych dier:
 
 ```python
 CONFIG_PATH = "configs/CH_standard.json"
 ```
 
-Príklad pre CH low-parameter experiment:
-
-```python
-CONFIG_PATH = "configs/CH_low.json"
-```
-
-Príklad pre AR experiment:
+Príklad pre aktívne oblasti:
 
 ```python
 CONFIG_PATH = "configs/AR_standard.json"
 ```
 
-Po zmene configu notebook automaticky použije modely, dáta, threshold a výstupný priečinok definované v danom konfiguračnom súbore.
+Podľa zvoleného konfiguračného súboru sa automaticky načítajú príslušné modely, dátové archívy, threshold a výstupný priečinok.
 
-## Výstupy
+### 6. Spustenie notebooku
 
-Po spustení predikčnej časti notebook vytvorí výstupy v priečinku definovanom v configu. Výstupy sa ukladajú do štruktúry:
+Notebook obsahuje dve hlavné spustiteľné časti:
+
+1. načítanie knižníc, konfigurácie, ciest a parametrov,
+2. predikcia na dodatočnej vyhodnocovacej množine.
+
+Predikcia sa vykonáva postupne po jednotlivých obrázkoch, aby sa nezvyšovala pamäťová náročnosť. Výstupy sa ukladajú do priečinka definovaného v konfiguračnom súbore.
+
+### 7. Výstupy
+
+Po spustení predikcie sa vytvorí priečinok:
 
 ```text
 outputs/<experiment_name>/prediction_on_additional_evaluation_set/
 ```
 
-V tejto zložke sa vytvoria:
+V ňom sa nachádzajú:
 
 ```text
-baseline_masks/             binárne masky modelu SCSS-Net
-convlstm_masks/             binárne masky modelu ConvLSTM-SCSS-Net
-baseline_probabilities/     pravdepodobnostné mapy modelu SCSS-Net
-convlstm_probabilities/     pravdepodobnostné mapy modelu ConvLSTM-SCSS-Net
-collages/                   vizuálne porovnania
-<experiment>_metrics.csv    numerické metriky
-used_config.json            použitý konfiguračný súbor
+baseline_masks/       binárne masky modelu SCSS-Net
+convlstm_masks/       binárne masky modelu ConvLSTM-SCSS-Net
+collages/             koláže s vizuálnym porovnaním
+metrics.csv           numerické metriky
+used_config.json      použitý konfiguračný súbor
 ```
+
+### 8. Poznámka ku Git LFS
+
+Súbor `.gitattributes` musí zostať v repozitári, pretože určuje, ktoré typy súborov sa majú ukladať pomocou Git LFS.
+
+Používa sa najmä pre:
+
+```text
+*.keras
+*.zip
+```
+
+Tieto súbory obsahujú natrénované modely a dátové archívy potrebné na spustenie predikčnej časti notebookov.
+
 
 ## Overlay vizualizácia
 
