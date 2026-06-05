@@ -16,7 +16,7 @@ a vytvára segmentačnú masku pre cieľový obraz `target image`.
 
 ```text
 configs/          konfiguračné súbory jednotlivých experimentov
-data/             dodatočné vyhodnocovacie množiny pre predikciu
+data/             dodatočné testovacie množiny pre predikciu
 src/              definície modelov a metrík
 trained_models/   uložené natrénované modely
 figures/          obrázky použité v notebookoch a dokumentácii
@@ -31,9 +31,9 @@ Kompletné tréningové dáta nie sú súčasťou repozitára. Dôvodom je ich v
 
 Notebooky preto neobsahujú plnohodnotné spustenie tréningu od začiatku. Tréningový pipeline je v nich opísaný slovne podľa pôvodných experimentálnych notebookov. Spustiteľná časť sa zameriava na predikciu pomocou už natrénovaných modelov.
 
-## Dodatočné vyhodnocovacie množiny
+## Dodatočné testovacie množiny
 
-Na porovnanie výsledkov natrénovaných modelov boli použité dodatočné vyhodnocovacie množiny. Tieto množiny neboli použité pri trénovaní modelov. Slúžia na vytvorenie predikcií oboch modelov a následné vizuálne a numerické porovnanie ich správania.
+Na porovnanie výsledkov natrénovaných modelov boli použité dodatočné testovacie množiny. Tieto množiny neboli použité pri trénovaní modelov. Slúžia na vytvorenie predikcií oboch modelov a následné vizuálne a numerické porovnanie ich správania.
 
 V repozitári sú uložené kompaktné predikčné dáta:
 
@@ -128,13 +128,13 @@ Konfigurácia, v ktorej boli modely trénované iba na časti množiny s anotác
 CH_2025_processed
 ```
 
-Predikcia pomocou štandardných CH modelov na spracovanej dodatočnej vyhodnocovacej množinе z roku 2025.
+Predikcia pomocou štandardných CH modelov na spracovanej dodatočnej testovacej množinе z roku 2025.
 
 ```text
 CH_2025_raw
 ```
 
-Predikcia pomocou štandardných CH modelov na nespracovanej dodatočnej vyhodnocovacej množinе z roku 2025.
+Predikcia pomocou štandardných CH modelov na nespracovanej dodatočnej testovacej množinе z roku 2025.
 
 ### AR konfigurácie
 
@@ -172,7 +172,7 @@ Notebooky majú rovnakú základnú štruktúru:
 1. opis pôvodného tréningového pipeline;
 2. výber konfiguračného súboru;
 3. načítanie modelov a dát podľa configu;
-4. predikcia na dodatočnej vyhodnocovacej množine;
+4. predikcia na dodatočnej testovacej množine;
 5. výpočet metrík;
 6. uloženie masiek, pravdepodobnostných máp a vizuálnych porovnaní.
 
@@ -357,7 +357,7 @@ Podľa zvoleného konfiguračného súboru sa automaticky načítajú príslušn
 Notebook obsahuje dve hlavné spustiteľné časti:
 
 1. načítanie knižníc, konfigurácie, ciest a parametrov,
-2. predikcia na dodatočnej vyhodnocovacej množine.
+2. predikcia na dodatočnej testovacej množine.
 
 Predikcia sa vykonáva postupne po jednotlivých obrázkoch, aby sa nezvyšovala pamäťová náročnosť. Výstupy sa ukladajú do priečinka definovaného v konfiguračnom súbore.
 
