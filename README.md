@@ -16,7 +16,7 @@ a vytvára segmentačnú masku pre cieľový obraz `target image`.
 
 ```text
 configs/          konfiguračné súbory jednotlivých experimentov
-data/             dodatočné vyhodnocovacie výberky pre predikciu
+data/             dodatočné vyhodnocovacie množiny pre predikciu
 src/              definície modelov a metrík
 trained_models/   uložené natrénované modely
 figures/          obrázky použité v notebookoch a dokumentácii
@@ -27,13 +27,13 @@ requirements.txt  zoznam Python knižníc
 
 ## Poznámka k tréningovým dátam
 
-Kompletné tréningové dáta nie sú súčasťou repozitára. Dôvodom je ich veľkosť, keďže pôvodná výberka bola rozšírená o časové sekvencie snímok. Celkový objem plných tréningových dát by bol príliš veľký na praktické uloženie v repozitári.
+Kompletné tréningové dáta nie sú súčasťou repozitára. Dôvodom je ich veľkosť, keďže pôvodná množina bola rozšírená o časové sekvencie snímok. Celkový objem plných tréningových dát by bol príliš veľký na praktické uloženie v repozitári.
 
 Notebooky preto neobsahujú plnohodnotné spustenie tréningu od začiatku. Tréningový pipeline je v nich opísaný slovne podľa pôvodných experimentálnych notebookov. Spustiteľná časť sa zameriava na predikciu pomocou už natrénovaných modelov.
 
-## Dodatočné vyhodnocovacie výberky
+## Dodatočné vyhodnocovacie množiny
 
-Na porovnanie výsledkov natrénovaných modelov boli použité dodatočné vyhodnocovacie výberky. Tieto výberky neboli použité pri trénovaní modelov. Slúžia na vytvorenie predikcií oboch modelov a následné vizuálne a numerické porovnanie ich správania.
+Na porovnanie výsledkov natrénovaných modelov boli použité dodatočné vyhodnocovacie množiny. Tieto množiny neboli použité pri trénovaní modelov. Slúžia na vytvorenie predikcií oboch modelov a následné vizuálne a numerické porovnanie ich správania.
 
 V repozitári sú uložené kompaktné predikčné dáta:
 
@@ -98,7 +98,7 @@ training_config
 prediction_config
 ```
 
-Časť `training_config` opisuje, v akých podmienkach boli modely natrénované. Obsahuje napríklad použitú tréningovú výberku, zdroje anotácií, veľkosť obrazu, dĺžku sekvencie a parametre modelu.
+Časť `training_config` opisuje, v akých podmienkach boli modely natrénované. Obsahuje napríklad použitú tréningovú množinu, zdroje anotácií, veľkosť obrazu, dĺžku sekvencie a parametre modelu.
 
 Časť `prediction_config` určuje, ktoré uložené modely a ktoré dátové archívy sa majú použiť pri spustení notebooku. Obsahuje aj threshold a výstupný priečinok.
 
@@ -110,7 +110,7 @@ prediction_config
 CH_standard
 ```
 
-Štandardná konfigurácia pre koronálne diery. Modely boli trénované na plnej dostupnej CH tréningovej výberke.
+Štandardná konfigurácia pre koronálne diery. Modely boli trénované na plnej dostupnej CH tréningovej množine.
 
 ```text
 CH_low
@@ -122,19 +122,19 @@ Konfigurácia so zníženým počtom parametrov. Používa menší počet filtro
 CH_region_growth
 ```
 
-Konfigurácia, v ktorej boli modely trénované iba na časti výberky s anotáciami Region Growth.
+Konfigurácia, v ktorej boli modely trénované iba na časti množiny s anotáciami Region Growth.
 
 ```text
 CH_2025_processed
 ```
 
-Predikcia pomocou štandardných CH modelov na spracovanej dodatočnej vyhodnocovacej výberke z roku 2025.
+Predikcia pomocou štandardných CH modelov na spracovanej dodatočnej vyhodnocovacej množinе z roku 2025.
 
 ```text
 CH_2025_raw
 ```
 
-Predikcia pomocou štandardných CH modelov na nespracovanej dodatočnej vyhodnocovacej výberke z roku 2025.
+Predikcia pomocou štandardných CH modelov na nespracovanej dodatočnej vyhodnocovacej množinе z roku 2025.
 
 ### AR konfigurácie
 
@@ -142,7 +142,7 @@ Predikcia pomocou štandardných CH modelov na nespracovanej dodatočnej vyhodno
 AR_standard
 ```
 
-Štandardná konfigurácia pre aktívne oblasti. Modely boli trénované na plnej dostupnej AR tréningovej výberke.
+Štandardná konfigurácia pre aktívne oblasti. Modely boli trénované na plnej dostupnej AR tréningovej množinе.
 
 ```text
 AR_low
@@ -154,7 +154,7 @@ Konfigurácia so zníženým počtom parametrov.
 AR_spoca
 ```
 
-Konfigurácia, v ktorej boli modely trénované iba na časti výberky s anotáciami SPoCA.
+Konfigurácia, v ktorej boli modely trénované iba na časti množiny s anotáciami SPoCA.
 
 Pri AR experimentoch sa používa threshold `0.25`. V časti analýzy výsledkov boli použité aj vizualizácie s threshold `0.5`. V tomto prípade však modely častejšie zaznamenávali nadbytočné oblasti. Preto v demonštračných notebookoch v tomto repozitári je však v konfiguračných súboroch ponechaná hodnota threshold, ktorá sa ukázala ako stabilnejšia pre daný typ predikcie a vizuálne porovnanie
 
@@ -172,7 +172,7 @@ Notebooky majú rovnakú základnú štruktúru:
 1. opis pôvodného tréningového pipeline;
 2. výber konfiguračného súboru;
 3. načítanie modelov a dát podľa configu;
-4. predikcia na dodatočnej vyhodnocovacej výberke;
+4. predikcia na dodatočnej vyhodnocovacej množine;
 5. výpočet metrík;
 6. uloženie masiek, pravdepodobnostných máp a vizuálnych porovnaní.
 
